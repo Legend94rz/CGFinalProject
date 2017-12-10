@@ -176,10 +176,14 @@ int BaseApp::run()
 		}
 		else
 		{
+			updateScene();
 			render();
 		}
 	}
 	return msg.wParam;
+}
+void BaseApp::updateScene()
+{
 }
 BaseApp::~BaseApp()
 {

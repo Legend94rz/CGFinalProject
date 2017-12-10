@@ -12,6 +12,7 @@ public:
 	virtual void onResize();
 	virtual void render();
 	virtual int run();
+	virtual void updateScene();
 
 	HWND hwnd;
 	HINSTANCE hinst;
