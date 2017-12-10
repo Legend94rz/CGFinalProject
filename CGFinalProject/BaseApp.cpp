@@ -17,8 +17,6 @@ LRESULT CALLBACK MainMsgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 		return DefWindowProc(hwnd, message, wParam, lParam);
 }
 
-
-
 BaseApp::BaseApp(HINSTANCE hinst)
 {
 	//default values
@@ -121,7 +119,8 @@ void BaseApp::onResize()
 }
 LRESULT BaseApp::msgProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
-
+	POINT mousePos;
+	int dx, dy;
 	switch (message)
 	{
 	case WM_SIZE:
@@ -153,8 +152,6 @@ LRESULT BaseApp::msgProc(UINT message, WPARAM wParam, LPARAM lParam)
 		onResize();
 		return 0;
 	}
-	case WM_MENUCHAR:
-		return MAKELRESULT(0, MNC_CLOSE);
 	}
 	return DefWindowProc(hwnd, message, wParam, lParam);
 }
@@ -176,10 +173,14 @@ int BaseApp::run()
 		}
 		else
 		{
+			updateScene();
 			render();
 		}
 	}
 	return msg.wParam;
+}
+void BaseApp::updateScene()
+{
 }
 BaseApp::~BaseApp()
 {
