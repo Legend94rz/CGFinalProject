@@ -1,23 +1,18 @@
 #pragma once
 #include <D3DX10.h>
-#include <vector>
 #include "Common.h"
 #include "Vertex.h"
-#include "Camera.h"
 #include "Light.h"
-class Land
+#include "Camera.h"
+class Box
 {
 public:
-	Land(ID3D10Device* device, int m, int n);
-	~Land();
-	float Y(float x,float z);
+	Box(ID3D10Device* device, float scale);
+	~Box();
 	void draw();
 	void initFX();
 	void initVertexLayout();
 private:
-	DWORD mNumRows;
-	DWORD mNumCols;
-
 	DWORD mNumVertices;
 	DWORD mNumFaces;
 
@@ -25,18 +20,22 @@ private:
 	ID3D10Buffer* mVB;
 	ID3D10Buffer* mIB;
 
-
+	Light mParallelLight;
 	ID3D10Effect* mFX;
 	ID3D10EffectTechnique* mTech;
+	ID3D10InputLayout* mVertexLayout;
+	ID3D10ShaderResourceView* mDiffuseMapRV;
+	ID3D10ShaderResourceView* mSpecMapRV;
+
 	ID3D10EffectMatrixVariable* mfxWVPVar;
 	ID3D10EffectMatrixVariable* mfxWorldVar;
 	ID3D10EffectVariable* mfxEyePosVar;
 	ID3D10EffectVariable* mfxLightVar;
+	ID3D10EffectShaderResourceVariable* mfxDiffuseMapVar;
+	ID3D10EffectShaderResourceVariable* mfxSpecMapVar;
+	ID3D10EffectMatrixVariable* mfxTexMtxVar;
 
-	ID3D10InputLayout* mVertexLayout;
 
-	Light light;
 	D3DXMATRIX mWVP;
-
 };
 
