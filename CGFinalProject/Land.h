@@ -12,9 +12,9 @@ public:
 	~Land();
 	float Y(float x,float z);
 	void draw();
+private:
 	void initFX();
 	void initVertexLayout();
-private:
 	DWORD mNumRows;
 	DWORD mNumCols;
 

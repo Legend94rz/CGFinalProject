@@ -10,8 +10,8 @@ Land::Land(ID3D10Device* device,int m,int n)
 	mNumVertices = m*n;
 	mNumFaces = (m - 1)*(n - 1) * 2;
 
-	// Create the geometry and fill the vertex buffer. 
-	std::vector<VertexForLand> vertices(mNumVertices);
+	//vertex buffer. 
+	std::vector<Vertex> vertices(mNumVertices);
 	float halfWidth = (n - 1)*dx*0.5f;
 	float halfDepth = (m - 1)*dx*0.5f;
 	for (DWORD i = 0; i < m; ++i)
@@ -23,7 +23,6 @@ Land::Land(ID3D10Device* device,int m,int n)
 
 			// Graph of this function looks like a mountain range.
 			float y = Y(x, z);
-
 			vertices[i*n + j].pos = D3DXVECTOR3(x, y, z);
 
 			// Color the vertex based on its height.
@@ -64,7 +63,7 @@ Land::Land(ID3D10Device* device,int m,int n)
 
 	D3D10_BUFFER_DESC vbd;
 	vbd.Usage = D3D10_USAGE_IMMUTABLE;
-	vbd.ByteWidth = sizeof(VertexForLand) * mNumVertices;
+	vbd.ByteWidth = sizeof(Vertex) * mNumVertices;
 	vbd.BindFlags = D3D10_BIND_VERTEX_BUFFER;
 	vbd.CPUAccessFlags = 0;
 	vbd.MiscFlags = 0;
@@ -73,12 +72,9 @@ Land::Land(ID3D10Device* device,int m,int n)
 	HR(md3dDevice->CreateBuffer(&vbd, &vinitData, &mVB));
 
 
-	// Create the index buffer.  The index buffer is fixed, so we only 
-	// need to create and set once.
+	//index buffer
+	std::vector<DWORD> indices(mNumFaces * 3);
 
-	std::vector<DWORD> indices(mNumFaces * 3); // 3 indices per face
-
-											   // Iterate over each quad and compute indices.
 	int k = 0;
 	for (DWORD i = 0; i < m - 1; ++i)
 	{
@@ -92,7 +88,7 @@ Land::Land(ID3D10Device* device,int m,int n)
 			indices[k + 4] = i*n + j + 1;
 			indices[k + 5] = (i + 1)*n + j + 1;
 
-			k += 6; // next quad
+			k += 6;
 		}
 	}
 
@@ -126,16 +122,14 @@ void Land::initFX()
 }
 void Land::initVertexLayout()
 {
-	// Create the vertex input layout.
 	D3D10_INPUT_ELEMENT_DESC vertexDesc[] =
 	{
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0,  D3D10_INPUT_PER_VERTEX_DATA, 0 },
-		{ "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D10_INPUT_PER_VERTEX_DATA, 0 },
-		{ "DIFFUSE",  0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 24, D3D10_INPUT_PER_VERTEX_DATA, 0 },
-		{ "SPECULAR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 40, D3D10_INPUT_PER_VERTEX_DATA, 0 }
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, offsetof(Vertex,pos),  D3D10_INPUT_PER_VERTEX_DATA, 0 },
+		{ "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT, 0, offsetof(Vertex,normal), D3D10_INPUT_PER_VERTEX_DATA, 0 },
+		{ "DIFFUSE",  0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, offsetof(Vertex,diffuse), D3D10_INPUT_PER_VERTEX_DATA, 0 },
+		{ "SPECULAR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, offsetof(Vertex,spec), D3D10_INPUT_PER_VERTEX_DATA, 0 }
 	};
 
-	// Create the input layout
 	D3D10_PASS_DESC PassDesc;
 	mTech->GetPassByIndex(0)->GetDesc(&PassDesc);
 	HR(md3dDevice->CreateInputLayout(vertexDesc, 4, PassDesc.pIAInputSignature,
@@ -161,7 +155,6 @@ void Land::draw()
 	md3dDevice->IASetInputLayout(mVertexLayout);
 	md3dDevice->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	// Set per frame constants.
 	mfxEyePosVar->SetRawValue(&GetCamera().position(), 0, sizeof(D3DXVECTOR3));
 	mfxLightVar->SetRawValue(&light, 0, sizeof(Light));
 
@@ -178,7 +171,7 @@ void Land::draw()
 		mfxWVPVar->SetMatrix((float*)&mWVP);
 		mfxWorldVar->SetMatrix((float*)&world);
 		pass->Apply(0);
-		UINT stride = sizeof(VertexForLand);
+		UINT stride = sizeof(Vertex);
 		UINT offset = 0;
 		md3dDevice->IASetVertexBuffers(0, 1, &mVB, &stride, &offset);
 		md3dDevice->IASetIndexBuffer(mIB, DXGI_FORMAT_R32_UINT, 0);

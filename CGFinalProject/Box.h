@@ -10,9 +10,9 @@ public:
 	Box(ID3D10Device* device, float scale);
 	~Box();
 	void draw();
+private:
 	void initFX();
 	void initVertexLayout();
-private:
 	DWORD mNumVertices;
 	DWORD mNumFaces;
 
@@ -34,7 +34,6 @@ private:
 	ID3D10EffectShaderResourceVariable* mfxDiffuseMapVar;
 	ID3D10EffectShaderResourceVariable* mfxSpecMapVar;
 	ID3D10EffectMatrixVariable* mfxTexMtxVar;
-
 
 	D3DXMATRIX mWVP;
 };
