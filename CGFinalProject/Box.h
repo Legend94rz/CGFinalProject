@@ -7,7 +7,9 @@
 class Box
 {
 public:
-	Box(ID3D10Device* device, float scale);
+	void initVertexBuffer(float scale);
+	void initIndexBuffer();
+	Box(ID3D10Device* device, float scale,Light light);
 	~Box();
 	void draw();
 private:
@@ -20,7 +22,7 @@ private:
 	ID3D10Buffer* mVB;
 	ID3D10Buffer* mIB;
 
-	Light mParallelLight;
+	Light mGlobalLight;
 	ID3D10Effect* mFX;
 	ID3D10EffectTechnique* mTech;
 	ID3D10InputLayout* mVertexLayout;

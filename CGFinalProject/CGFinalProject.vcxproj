@@ -142,6 +142,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CGFinalProject.cpp" />
     <ClCompile Include="Land.cpp" />
+    <ClCompile Include="Sky.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseApp.h" />
@@ -150,6 +151,7 @@
     <ClInclude Include="Common.h" />
     <ClInclude Include="Land.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="Sky.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

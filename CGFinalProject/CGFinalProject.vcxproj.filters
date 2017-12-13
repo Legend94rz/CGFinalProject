@@ -30,6 +30,9 @@
     <ClCompile Include="Box.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Sky.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseApp.h">
@@ -51,6 +54,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Box.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Sky.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

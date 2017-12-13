@@ -1,6 +1,7 @@
 #include "BaseApp.h"
 #include "Land.h"
 #include "Box.h"
+#include "Sky.h"
 
 class App:public BaseApp
 {
@@ -8,11 +9,18 @@ private:
 	POINT mOldMousePos;
 	Land* land;
 	Box* box;
+	Light light;
+	Sky* sky;
 public:
 	App(HINSTANCE hinst):BaseApp(hinst)
 	{
-		land = new Land(mDevice, 257, 257);
-		box = new Box(mDevice, 10);
+		light.dir = D3DXVECTOR3(0.57735f, -0.57735f, 0.57735f);
+		light.ambient = D3DXCOLOR(0.4f, 0.4f, 0.4f, 1.0f);
+		light.diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+		light.specular = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+		land = new Land(mDevice, 257, 257,light);
+		box = new Box(mDevice, 10,light);
+		sky = new Sky(_T("skybox.fx"),_T("skybox.dds"),mDevice);
 	}
 
 	virtual void updateScene()
@@ -36,6 +44,7 @@ public:
 		BaseApp::render();
 		land->draw();
 		box->draw();
+		sky->draw();
 		mSwapChain->Present(0, 0);
 	}
 	virtual LRESULT CALLBACK msgProc(UINT message, WPARAM wParam, LPARAM lParam)
@@ -79,7 +88,6 @@ public:
 	{
 		BaseApp::~BaseApp();
 	}
-
 };
 
 

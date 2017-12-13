@@ -1,17 +1,8 @@
 #include "Land.h"
 
-Land::Land(ID3D10Device* device,int m,int n)
+void Land::initVertexBuffer(int n, float dx, int m)
 {
-	md3dDevice = device;
-
-	mNumRows = m;
-	mNumCols = n;
-	float dx = 1.0;
-	mNumVertices = m*n;
-	mNumFaces = (m - 1)*(n - 1) * 2;
-
-	//vertex buffer. 
-	std::vector<Vertex> vertices(mNumVertices);
+	std::vector<Vertex> vertices(m*n);
 	float halfWidth = (n - 1)*dx*0.5f;
 	float halfDepth = (m - 1)*dx*0.5f;
 	for (DWORD i = 0; i < m; ++i)
@@ -20,12 +11,10 @@ Land::Land(ID3D10Device* device,int m,int n)
 		for (DWORD j = 0; j < n; ++j)
 		{
 			float x = -halfWidth + j*dx;
-
-			// Graph of this function looks like a mountain range.
 			float y = Y(x, z);
+
 			vertices[i*n + j].pos = D3DXVECTOR3(x, y, z);
 
-			// Color the vertex based on its height.
 			if (y < -10.0f)
 			{
 				vertices[i*n + j].diffuse = BEACH_SAND;
@@ -63,16 +52,17 @@ Land::Land(ID3D10Device* device,int m,int n)
 
 	D3D10_BUFFER_DESC vbd;
 	vbd.Usage = D3D10_USAGE_IMMUTABLE;
-	vbd.ByteWidth = sizeof(Vertex) * mNumVertices;
+	vbd.ByteWidth = sizeof(Vertex) * m*n;
 	vbd.BindFlags = D3D10_BIND_VERTEX_BUFFER;
 	vbd.CPUAccessFlags = 0;
 	vbd.MiscFlags = 0;
 	D3D10_SUBRESOURCE_DATA vinitData;
 	vinitData.pSysMem = &vertices[0];
 	HR(md3dDevice->CreateBuffer(&vbd, &vinitData, &mVB));
+}
 
-
-	//index buffer
+void Land::initIndexBuffer(int m, int n)
+{
 	std::vector<DWORD> indices(mNumFaces * 3);
 
 	int k = 0;
@@ -101,11 +91,18 @@ Land::Land(ID3D10Device* device,int m,int n)
 	D3D10_SUBRESOURCE_DATA iinitData;
 	iinitData.pSysMem = &indices[0];
 	HR(md3dDevice->CreateBuffer(&ibd, &iinitData, &mIB));
+}
 
-	light.dir = D3DXVECTOR3(0.57735f, -0.57735f, 0.57735f);
-	light.ambient = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
-	light.diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	light.specular = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+Land::Land(ID3D10Device* device,int m,int n,Light light):
+	mGlobalLight(light)
+{
+	float dx = 1.0;
+	md3dDevice = device;
+
+	mNumFaces = (m - 1)*(n - 1) * 2;
+
+	initVertexBuffer(n, dx, m);
+	initIndexBuffer(m, n);
 	initFX();
 	initVertexLayout();
 }
@@ -156,7 +153,7 @@ void Land::draw()
 	md3dDevice->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	mfxEyePosVar->SetRawValue(&GetCamera().position(), 0, sizeof(D3DXVECTOR3));
-	mfxLightVar->SetRawValue(&light, 0, sizeof(Light));
+	mfxLightVar->SetRawValue(&mGlobalLight, 0, sizeof(Light));
 
 	D3D10_TECHNIQUE_DESC techDesc;
 	mTech->GetDesc(&techDesc);

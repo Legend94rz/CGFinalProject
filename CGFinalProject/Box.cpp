@@ -2,13 +2,8 @@
 
 
 
-Box::Box(ID3D10Device* device, float scale)
+void Box::initVertexBuffer(float scale)
 {
-	md3dDevice = device;
-
-	mNumVertices = 24;
-	mNumFaces = 12;
-
 	//vertex buf
 	Vertex v[24];
 	//front
@@ -59,8 +54,10 @@ Box::Box(ID3D10Device* device, float scale)
 	D3D10_SUBRESOURCE_DATA vinitData;
 	vinitData.pSysMem = v;
 	HR(md3dDevice->CreateBuffer(&vbd, &vinitData, &mVB));
+}
 
-
+void Box::initIndexBuffer()
+{
 	//index buffer
 	DWORD i[36];
 
@@ -97,16 +94,20 @@ Box::Box(ID3D10Device* device, float scale)
 	D3D10_SUBRESOURCE_DATA iinitData;
 	iinitData.pSysMem = i;
 	HR(md3dDevice->CreateBuffer(&ibd, &iinitData, &mIB));
+}
 
+Box::Box(ID3D10Device* device, float scale,Light light):mGlobalLight(light)
+{
+	md3dDevice = device;
+
+	mNumVertices = 24;
+	mNumFaces = 12;
 
 	HR(D3DX10CreateShaderResourceViewFromFile(md3dDevice, L"WoodCrate01.dds", 0, 0, &mDiffuseMapRV, 0));
 	HR(D3DX10CreateShaderResourceViewFromFile(md3dDevice, L"defaultspec.dds", 0, 0, &mSpecMapRV, 0));
 
-	mParallelLight.dir = D3DXVECTOR3(0.57735f, -0.57735f, 0.57735f);
-	mParallelLight.ambient = D3DXCOLOR(0.4f, 0.4f, 0.4f, 1.0f);
-	mParallelLight.diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	mParallelLight.specular = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-
+	initVertexBuffer(scale);
+	initIndexBuffer();
 	initFX();
 	initVertexLayout();
 }
@@ -136,7 +137,7 @@ void Box::draw()
 	for (UINT p = 0; p < techDesc.Passes; ++p)
 	{
 		mfxEyePosVar->SetRawValue(&GetCamera().position(), 0, sizeof(D3DXVECTOR3));
-		mfxLightVar->SetRawValue(&mParallelLight, 0, sizeof(Light));
+		mfxLightVar->SetRawValue(&mGlobalLight, 0, sizeof(Light));
 		mWVP = world*GetCamera().view()*GetCamera().proj();
 		mfxWVPVar->SetMatrix((float*)&mWVP);
 		mfxWorldVar->SetMatrix((float*)&world);
