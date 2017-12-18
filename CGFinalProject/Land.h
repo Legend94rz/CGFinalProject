@@ -30,10 +30,16 @@ private:
 	ID3D10EffectMatrixVariable* mfxWorldVar;
 	ID3D10EffectVariable* mfxEyePosVar;
 	ID3D10EffectVariable* mfxLightVar;
+	ID3D10EffectShaderResourceVariable* mfxDiffuseMapVar;
+	ID3D10EffectShaderResourceVariable* mfxSpecMapVar;
+	ID3D10EffectMatrixVariable* mfxTexMtxVar;
 
 	ID3D10InputLayout* mVertexLayout;
 
 	Light mGlobalLight;
 	D3DXMATRIX mWVP;
+	ID3D10ShaderResourceView* mGrassMapRV;
+	ID3D10ShaderResourceView* mDefaultSpecMapRV;
+
 };
 

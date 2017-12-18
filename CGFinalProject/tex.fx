@@ -6,8 +6,6 @@ cbuffer cbPerFrame
 	float3 gEyePosW;
 };
 
-bool gSpecularEnabled;
-
 cbuffer cbPerObject
 {
 	float4x4 gWorld;
