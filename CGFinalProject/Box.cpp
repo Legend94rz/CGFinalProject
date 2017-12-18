@@ -4,7 +4,6 @@
 
 void Box::initVertexBuffer(float scale)
 {
-	//vertex buf
 	Vertex v[24];
 	//front
 	v[0] = Vertex(-1.0f, -1.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f);
@@ -58,7 +57,6 @@ void Box::initVertexBuffer(float scale)
 
 void Box::initIndexBuffer()
 {
-	//index buffer
 	DWORD i[36];
 
 	//front

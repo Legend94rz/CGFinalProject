@@ -15,7 +15,7 @@ public:
 	App(HINSTANCE hinst):BaseApp(hinst)
 	{
 		light.dir = D3DXVECTOR3(0.57735f, -0.57735f, 0.57735f);
-		light.ambient = D3DXCOLOR(0.4f, 0.4f, 0.4f, 1.0f);
+		light.ambient = D3DXCOLOR(0.2f, 0.2f, 0.2f, 1.0f);
 		light.diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 		light.specular = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 		land = new Land(mDevice, 257, 257,light);

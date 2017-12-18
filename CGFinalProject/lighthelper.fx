@@ -1,13 +1,9 @@
 struct Light
 {
-	float3 pos;
 	float3 dir;
 	float4 ambient;
 	float4 diffuse;
 	float4 spec;
-	float3 att;
-	float  spotPower;
-	float  range;
 };
 
 struct SurfaceInfo
