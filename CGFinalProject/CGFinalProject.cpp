@@ -14,7 +14,7 @@ private:
 public:
 	App(HINSTANCE hinst):BaseApp(hinst)
 	{
-		light.dir = D3DXVECTOR3(0.57735f, -0.57735f, 0.57735f);
+		D3DXVec3Normalize(&light.dir,&D3DXVECTOR3(1, -1, 1));
 		light.ambient = D3DXCOLOR(0.2f, 0.2f, 0.2f, 1.0f);
 		light.diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 		light.specular = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
@@ -75,7 +75,7 @@ public:
 				dx = mousePos.x - mOldMousePos.x;
 				dy = mousePos.y - mOldMousePos.y;
 
-				GetCamera().pitch(dy * 0.0087266f);
+				GetCamera().pitch(dy * 0.0087266f);		//	pi/360
 				GetCamera().rotateY(dx * 0.0087266f);
 
 				mOldMousePos = mousePos;

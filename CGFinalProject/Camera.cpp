@@ -80,7 +80,7 @@ void Camera::rebuildView()
 
 	D3DXVec3Cross(&mRight, &mUp, &mLook);
 	D3DXVec3Normalize(&mRight, &mRight);
-
+	
 	// Fill in the view matrix entries.
 	float x = -D3DXVec3Dot(&mPosition, &mRight);
 	float y = -D3DXVec3Dot(&mPosition, &mUp);
