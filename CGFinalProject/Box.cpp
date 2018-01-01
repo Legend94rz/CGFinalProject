@@ -152,6 +152,11 @@ void Box::draw()
 	}
 }
 
+void Box::setLight(Light newLight)
+{
+	mGlobalLight = newLight;
+}
+
 void Box::initFX()
 {
 	ID3D10Blob* compilationErrors = 0;

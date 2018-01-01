@@ -87,6 +87,10 @@ Land::Land(ID3D10Device* device,int m,int n,Light light):
 	initFX();
 	initVertexLayout();
 }
+void Land::setLight(Light newLight)
+{
+	mGlobalLight = newLight;
+}
 void Land::initFX()
 {
 	ID3D10Blob* compilationErrors = 0;

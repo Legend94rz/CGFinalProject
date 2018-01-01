@@ -11,10 +11,12 @@ private:
 	Box* box;
 	Light light;
 	Sky* sky;
+	double a;
 public:
 	App(HINSTANCE hinst):BaseApp(hinst)
 	{
-		D3DXVec3Normalize(&light.dir,&D3DXVECTOR3(1, -1, 1));
+		a = 0;
+		D3DXVec3Normalize(&light.dir,&D3DXVECTOR3(cos(a), -1, sin(a)));
 		light.ambient = D3DXCOLOR(0.2f, 0.2f, 0.2f, 1.0f);
 		light.diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 		light.specular = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
@@ -32,6 +34,12 @@ public:
 		if (GetAsyncKeyState('A') & 0x8000) GetCamera().strafe(-50 * dt);
 		if (GetAsyncKeyState('D') & 0x8000) GetCamera().strafe(50 * dt);
 		GetCamera().rebuildView();
+		a += D3DX_PI / 360 * 0.5;
+		if (a >= 2 * D3DX_PI)
+			a = 0;
+		D3DXVec3Normalize(&light.dir, &D3DXVECTOR3(cos(a), -1, sin(a)));
+		box->setLight(light);
+		land->setLight(light);
 	}
 	virtual void onResize()
 	{
@@ -75,8 +83,8 @@ public:
 				dx = mousePos.x - mOldMousePos.x;
 				dy = mousePos.y - mOldMousePos.y;
 
-				GetCamera().pitch(dy * 0.0087266f);		//	pi/360
-				GetCamera().rotateY(dx * 0.0087266f);
+				GetCamera().pitch(dy * D3DX_PI/360);		//	pi/360
+				GetCamera().rotateY(dx * D3DX_PI / 360);
 
 				mOldMousePos = mousePos;
 			}

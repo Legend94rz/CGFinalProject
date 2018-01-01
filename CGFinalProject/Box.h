@@ -12,6 +12,7 @@ public:
 	Box(ID3D10Device* device, float scale,Light light);
 	~Box();
 	void draw();
+	void setLight(Light newLight);
 private:
 	void initFX();
 	void initVertexLayout();

@@ -12,6 +12,7 @@ public:
 	~Land();
 	float Y(float x,float z);
 	void draw();
+	void setLight(Light);
 private:
 	void initFX();
 	void initVertexLayout();
